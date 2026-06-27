@@ -1,5 +1,9 @@
 # Custom-Spellcheck
-Takes a list of words specified by user and spellchecks input text to that dictionary
+Takes a list of words specified by user and spellchecks input text to that dictionary.
+
+The current scorer is CPU-only and dependency-free. Each word is represented as a
+sparse character n-gram vector, candidates are compared with cosine similarity,
+and close matches are ranked with an edit-distance tie breaker.
 
 Flow Chart of Valid Word Initialization & Word Selection
 ```mermaid
@@ -17,7 +21,7 @@ graph TD;
 ```
 
 
-  
+
 <h3>Example (color_example.py):</h3>
 
 ```
@@ -39,16 +43,16 @@ print(rgb[1])
 
 print(color_book.spellcheck_word("ponk")[1]["RGB"])
 ```
-  
+
 <h3>Unchecked Input</h3>
 INPUT (without Custom Spellcheck): `rgb = color_book["ponk"]["RGB"]`
 
 OUTPUT: `Key Error`
 
 <h3>Spellchecked Input</h3>
-INPUT (with Custom Spellcheck): `rgb = color_book.spellcheckword("ponk")[1]["RGB"]`
+INPUT (with Custom Spellcheck): `rgb = color_book.spellcheck_word("ponk")[1]["RGB"]`
 
 OUTPUT: `rgb = color_book["pink"]["RGB"]`
 
-Note: `color_book.spellcheckword("ponk")[1]` gets the information of the word (RGB in this case), 
-`color_book.spellcheckword("ponk")[0]` is the word
+Note: `color_book.spellcheck_word("ponk")[1]` gets the information of the word (RGB in this case),
+`color_book.spellcheck_word("ponk")[0]` is the word

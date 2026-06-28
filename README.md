@@ -5,19 +5,27 @@ The current scorer is CPU-only and dependency-free. Each word is represented as 
 sparse character n-gram vector, candidates are compared with cosine similarity,
 and close matches are ranked with an edit-distance tie breaker.
 
-Flow Chart of Valid Word Initialization & Word Selection
+Flow Chart of WordBook Initialization & Word Selection
 ```mermaid
 graph TD;
-    A[valid word added]-->B[wordScore calculated];
-    C[charScores used to determine character weights and dimensionality]-->B[wordScore calculated];
-    B[wordScore calculated]-->D[wordScore and data associated with word stored in Valid Dictionary hash map];
-    D[wordScore and data associated with word stored in Valid Dictionary hash map]-->E[WordBook];
-    D-->A
-    E[WordBook initialized]-->F[user input read];
-    F[user input read]-->G[input wordScore calculated];
-    G[input wordScore calculated]-->H[input wordScore compared to wordScores in Valid Dictionary];
-    H[input wordScore compared to wordScores in Valid Dictionary]-->J[Valid Dictionary entry with closest wordScore match returned];
-    J[Valid Dictionary entry with closest wordScore match returned]-->F[user input read];
+    A[Add word or dictionary entry] --> B[Clean word];
+    B --> C[Build weighted character n-grams];
+    C --> D[Normalize sparse wordScore vector];
+    D --> E[Store word and metadata];
+    E --> F[Index n-gram features to candidate words];
+    F --> G[User input];
+    G --> H{Exact word in WordBook?};
+    H -->|yes| I[Return exact word and entry];
+    H -->|no| J[Clean input];
+    J --> K[Build input n-gram vector];
+    K --> L[Find candidates sharing n-gram features];
+    L --> M[Rank candidates];
+    M --> N[Cosine similarity for n-gram overlap];
+    M --> O[Edit-distance similarity for typos];
+    M --> P[Length similarity tie breaker];
+    N --> Q[Return best word and entry];
+    O --> Q;
+    P --> Q;
 ```
 
 
